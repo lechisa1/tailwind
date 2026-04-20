@@ -7,9 +7,9 @@ import { BudgetAllocationChart } from "@/features/dashboard/BudgetAllocationChar
 import { MonthlyRevenueChart } from "@/features/dashboard/MonthlyRevenueChart";
 import { RecentActivity } from "@/features/dashboard/RecentActivity";
 import { ProjectList } from "@/features/projects/ProjectList";
-import { UserList } from "@/features/users/UserList";
-import { useAuth } from "@/contexts/AuthContext";
 
+import { useAuth } from "@/contexts/AuthContext";
+import { Breadcrumb } from "@/components/ui/Breadcrumb";
 // Icons
 const ProjectsIcon = () => (
   <svg
@@ -81,7 +81,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {/* <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
             Welcome back, {user?.name?.split(" ")[0] || "User"}!
@@ -98,8 +98,8 @@ export default function DashboardPage() {
             day: "numeric",
           })}
         </div>
-      </div>
-
+      </div> */}
+      <Breadcrumb items={[{ label: "Dashboard" }]} />
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <StatCard
@@ -150,9 +150,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Users Table */}
-      <div className="grid grid-cols-1 gap-4 md:gap-6">
+      {/* <div className="grid grid-cols-1 gap-4 md:gap-6">
         <UserList />
-      </div>
+      </div> */}
     </div>
   );
 }
