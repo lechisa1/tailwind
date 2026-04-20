@@ -18,9 +18,15 @@
         "name": "next"
       }
     ],
+    "baseUrl": "src",
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["*"],
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/styles/*": ["styles/*"]
+    },
+    "ignoreDeprecations": "6.0",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "next-env.d.ts",

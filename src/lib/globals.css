@@ -1,0 +1,8 @@
+
+@import "tailwindcss";
+:root {
+  /* The "Center" for your brand colors */
+  --brand: #3b82f6; 
+  --brand-foreground: #ffffff;
+  --accent: #f59e0b;
+}
