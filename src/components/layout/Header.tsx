@@ -48,31 +48,53 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const canAccessSettings = userRole === "Admin" || userRole === "Editor";
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b bg-white/80 backdrop-blur-md px-4 md:px-6 flex items-center justify-between">
-      {/* Left: Mobile Menu Button + Search */}
-      <div className="flex items-center gap-3 md:gap-4 flex-1">
+    <header className="sticky top-0 z-30 h-16 border-b bg-white/80 backdrop-blur-md px-4 md:px-6 flex items-center">
+      {/* Left: Logo + Mobile Toggle */}
+      <div className="flex items-center gap-3 md:gap-4 flex-1 lg:flex-none lg:w-64">
         {/* Mobile menu button */}
         <button
           onClick={onMenuToggle}
           className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
           aria-label="Toggle menu"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
 
-        {/* Search - compact on mobile */}
-        <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md">
+        {/* Logo */}
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded bg-[var(--brand)] flex items-center justify-center text-white font-bold shrink-0">
+            A
+          </div>
+          <span className="font-bold text-xl tracking-tight text-black hidden sm:inline">
+            AcmeCorp
+          </span>
+        </div>
+      </div>
+
+      {/* Center: Search */}
+      <div className="flex-1 flex justify-center px-4">
+        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
           <Input
             placeholder="Search..."
-            className="bg-gray-100/50 border-transparent focus:bg-white text-black focus:ring-[var(--brand)] transition-all h-9 md:h-10"
+            className="bg-gray-100/50 border-transparent focus:bg-white text-black focus:ring-[var(--brand)] transition-all h-9 md:h-10 w-full"
           />
         </div>
-        </div>
+      </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 md:gap-4">
+      {/* Right: Actions */}
+      <div className="flex items-center gap-2 md:gap-4 flex-1 lg:flex-none justify-end lg:w-64">
         {/* Notification System */}
         <div className="relative" ref={notificationRef}>
           <button
@@ -149,7 +171,9 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
           {isProfileOpen && (
             <div className="absolute right-0 mt-2 w-56 bg-white border rounded-xl shadow-xl py-1 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
               <div className="px-4 py-3 border-b mb-1">
-                <p className="text-sm font-semibold text-black">{auth?.user?.name || "User"}</p>
+                <p className="text-sm font-semibold text-black">
+                  {auth?.user?.name || "User"}
+                </p>
                 <p className="text-xs text-gray-500 truncate">
                   {auth?.user?.email || "user@example.com"}
                 </p>
