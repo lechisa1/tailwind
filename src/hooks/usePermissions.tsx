@@ -4,42 +4,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import { useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import type { Permission, Role, RoutePermission } from "@/types/permission";
+import type { Permission, Role } from "@/types/permission";
+import { ROUTE_PERMISSIONS } from "@/config/routes";
 
-const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
-  Admin: [
-    "projects:view",
-    "projects:create",
-    "projects:edit",
-    "projects:delete",
-    "users:view",
-    "users:create",
-    "users:edit",
-    "users:delete",
-    "settings:view",
-    "settings:edit",
-  ],
-  Editor: [
-    "projects:view",
-    "projects:create",
-    "projects:edit",
-    "users:view",
-    "settings:view",
-  ],
-  Viewer: [
-    "projects:view",
-    "users:view",
-    "settings:view",
-  ],
-};
-
-const ROUTE_PERMISSIONS: RoutePermission[] = [
-  { path: "/auth", requiredPermissions: [], exact: true },
-  { path: "/", requiredPermissions: [], exact: true },
-  { path: "/project", requiredPermissions: ["projects:view"] },
-  { path: "/user", requiredPermissions: ["users:view", "users:edit", "users:delete"] },
-  { path: "/settings", requiredPermissions: ["settings:view", "settings:edit"] },
-];
+// ============================================================================
+// PERMISSIONS - All available permissions
+// ============================================================================
 
 export const ALL_PERMISSIONS: Permission[] = [
   "projects:view",
@@ -67,7 +37,38 @@ export const PERMISSION_LABELS: Record<Permission, string> = {
   "settings:edit": "Edit Settings",
 };
 
+// ============================================================================
+// ROLES - Role-based permissions
+// ============================================================================
+
+const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
+  Admin: [
+    "projects:view",
+    "projects:create",
+    "projects:edit",
+    "projects:delete",
+    "users:view",
+    "users:create",
+    "users:edit",
+    "users:delete",
+    "settings:view",
+    "settings:edit",
+  ],
+  Editor: [
+    "projects:view",
+    "projects:create",
+    "projects:edit",
+    "users:view",
+    "settings:view",
+  ],
+  Viewer: ["projects:view", "users:view", "settings:view"],
+};
+
 export const ROLE_PERMISSION_MATRIX = ROLE_PERMISSIONS;
+
+// ============================================================================
+// HOOKS - Main permissions hook
+// ============================================================================
 
 export function usePermissions() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -93,8 +94,8 @@ export function usePermissions() {
   };
 
   const hasRoutePermission = (path: string): boolean => {
-    const routeConfig = ROUTE_PERMISSIONS.find(
-      (r) => r.exact ? r.path === path : path.startsWith(r.path)
+    const routeConfig = ROUTE_PERMISSIONS.find((r) =>
+      r.exact ? r.path === path : path.startsWith(r.path),
     );
 
     if (!routeConfig) return false;
@@ -115,6 +116,10 @@ export function usePermissions() {
   };
 }
 
+// ============================================================================
+// GUARDS - Route and Permission guards
+// ============================================================================
+
 interface RouteGuardProps {
   children: ReactNode;
   fallback?: ReactNode;
@@ -133,7 +138,13 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
   }, [pathname, hasRoutePermission, isLoading, router]);
 
   if (isLoading) {
-    return fallback || <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return (
+      fallback || (
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      )
+    );
   }
 
   if (!hasRoutePermission(pathname)) {
@@ -145,7 +156,7 @@ export function RouteGuard({ children, fallback }: RouteGuardProps) {
 
 export function requireRole(allowedRoles: Role[]) {
   return function <P extends object>(
-    WrappedComponent: React.ComponentType<P>
+    WrappedComponent: React.ComponentType<P>,
   ): React.FC<P> {
     return function ProtectedComponent(props: P) {
       const { user, isAuthenticated } = useAuth();
@@ -176,7 +187,11 @@ interface PermissionGuardProps {
   fallback?: ReactNode;
 }
 
-export function PermissionGuard({ requiredPermission, children, fallback }: PermissionGuardProps) {
+export function PermissionGuard({
+  requiredPermission,
+  children,
+  fallback,
+}: PermissionGuardProps) {
   const { hasPermission } = usePermissions();
 
   if (!hasPermission(requiredPermission)) {
@@ -185,6 +200,10 @@ export function PermissionGuard({ requiredPermission, children, fallback }: Perm
 
   return <>{children}</>;
 }
+
+// ============================================================================
+// UTILITIES - Helper functions
+// ============================================================================
 
 export function useRolePermissions(role: Role): Permission[] {
   return ROLE_PERMISSIONS[role];

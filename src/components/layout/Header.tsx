@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/contexts/AuthContext";
-import { usePermissions } from "@/hooks/usePermissions";
+import { usePermissions, PermissionGuard } from "@/hooks/usePermissions";
 
 export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const router = useRouter();
@@ -43,9 +43,6 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const canAccessUser = userRole === "Admin";
-  const canAccessSettings = userRole === "Admin" || userRole === "Editor";
 
   return (
     <header className="sticky top-0 z-30 h-16 border-b bg-white/80 backdrop-blur-md px-4 md:px-6 flex items-center">
@@ -179,7 +176,7 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
                 </p>
               </div>
 
-              {canAccessUser && (
+              <PermissionGuard requiredPermission="users:view">
                 <Link
                   href="/user"
                   className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -199,9 +196,9 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
                   </svg>
                   Profile Settings
                 </Link>
-              )}
+              </PermissionGuard>
 
-              {canAccessSettings && (
+              <PermissionGuard requiredPermission="settings:view">
                 <Link
                   href="/settings"
                   className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -221,7 +218,7 @@ export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
                   </svg>
                   Account Preferences
                 </Link>
-              )}
+              </PermissionGuard>
 
               <div className="border-t my-1"></div>
               <button
