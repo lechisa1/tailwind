@@ -39,14 +39,14 @@ export function ProjectList() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6">
         <div className="space-y-1">
           <CardTitle className="text-xl">Active Projects</CardTitle>
           <p className="text-sm text-gray-500">
             Monitor budget and progress across all initiatives.
           </p>
         </div>
-        <Button size="sm" onClick={() => setModalOpen(true)}>
+        <Button size="sm" className="w-full sm:w-auto" onClick={() => setModalOpen(true)}>
           New Project
         </Button>
       </CardHeader>

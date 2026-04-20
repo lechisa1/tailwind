@@ -65,14 +65,14 @@ export function UserList() {
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-7">
+      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6">
         <div className="space-y-1">
           <CardTitle className="text-xl text-black">Team Members</CardTitle>
           <p className="text-sm text-gray-500">
             Manage your team and their access levels.
           </p>
         </div>
-        <Button size="sm" onClick={() => setCreateModalOpen(true)}>
+        <Button size="sm" className="w-full sm:w-auto" onClick={() => setCreateModalOpen(true)}>
           + Invite User
         </Button>
       </CardHeader>
@@ -115,11 +115,12 @@ export function UserList() {
               header: "Actions",
               accessor: "id",
               cell: (row) => (
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => openDetailModal(row)}
+                    className="w-full sm:w-auto"
                   >
                     View
                   </Button>
@@ -127,13 +128,14 @@ export function UserList() {
                     variant="outline"
                     size="sm"
                     onClick={() => openEditModal(row)}
+                    className="w-full sm:w-auto"
                   >
                     Edit
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-red-600 hover:bg-red-50"
+                    className="text-red-600 hover:bg-red-50 w-full sm:w-auto"
                     onClick={() => handleDeleteUser(row.id, row.name)}
                   >
                     Delete

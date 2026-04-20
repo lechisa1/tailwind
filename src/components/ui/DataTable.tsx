@@ -24,15 +24,15 @@ export function DataTable({
       {/* Table Toolbar: Search & Filters */}
       <div className="flex items-center justify-between gap-4">{headers}</div>
 
-      {/* The Table Container */}
-      <div className="rounded-md border border-gray-200 bg-white overflow-hidden">
+      {/* The Table Container - responsive with horizontal scroll on mobile */}
+      <div className="rounded-md border border-gray-200 bg-white overflow-x-auto -mx-4 md:mx-0">
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.accessor}
-                  className="px-6 py-3 text-left font-semibold text-gray-900"
+                  className="px-4 py-3 md:px-6 md:py-3 text-left font-semibold text-gray-900 whitespace-nowrap"
                 >
                   {col.header}
                 </th>
@@ -46,7 +46,7 @@ export function DataTable({
                   {columns.map((col) => (
                     <td
                       key={col.accessor}
-                      className="px-6 py-4 whitespace-nowrap text-gray-700"
+                      className="px-4 py-3 md:px-6 md:py-4 whitespace-nowrap text-gray-700"
                     >
                       {col.cell ? col.cell(row) : row[col.accessor]}
                     </td>
@@ -57,7 +57,7 @@ export function DataTable({
               <tr>
                 <td
                   colSpan={columns.length}
-                  className="px-6 py-10 text-center text-gray-500"
+                  className="px-4 py-10 md:px-6 md:py-10 text-center text-gray-500"
                 >
                   No results found.
                 </td>

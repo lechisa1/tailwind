@@ -2,13 +2,14 @@
 
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { Input } from "../ui/Input";
+import { Button } from "../ui/Button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/contexts/AuthContext";
 import { usePermissions } from "@/hooks/usePermissions";
 
-export function Header() {
+export function Header({ onMenuToggle }: { onMenuToggle?: () => void }) {
   const router = useRouter();
   const auth = useContext(AuthContext);
   const { userRole } = usePermissions();
@@ -47,15 +48,31 @@ export function Header() {
   const canAccessSettings = userRole === "Admin" || userRole === "Editor";
 
   return (
-    <header className="sticky top-0 z-30 h-16 border-b bg-white/80 backdrop-blur-md px-8 flex items-center justify-between">
-      <div className="w-full max-w-sm">
-        <Input
-          placeholder="Search documentation..."
-          className="bg-gray-100/50 border-transparent focus:bg-white text-black focus:ring-[var(--brand)] transition-all"
-        />
-      </div>
+    <header className="sticky top-0 z-30 h-16 border-b bg-white/80 backdrop-blur-md px-4 md:px-6 flex items-center justify-between">
+      {/* Left: Mobile Menu Button + Search */}
+      <div className="flex items-center gap-3 md:gap-4 flex-1">
+        {/* Mobile menu button */}
+        <button
+          onClick={onMenuToggle}
+          className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+          aria-label="Toggle menu"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
 
-      <div className="flex items-center gap-4">
+        {/* Search - compact on mobile */}
+        <div className="flex-1 max-w-xs sm:max-w-sm md:max-w-md">
+          <Input
+            placeholder="Search..."
+            className="bg-gray-100/50 border-transparent focus:bg-white text-black focus:ring-[var(--brand)] transition-all h-9 md:h-10"
+          />
+        </div>
+        </div>
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-2 md:gap-4">
         {/* Notification System */}
         <div className="relative" ref={notificationRef}>
           <button
@@ -119,12 +136,12 @@ export function Header() {
         <div className="relative" ref={profileRef}>
           <button
             onClick={() => setIsProfileOpen(!isProfileOpen)}
-            className="flex items-center gap-2 p-1 pl-3 border border-gray-200 rounded-full hover:shadow-md transition-all bg-white focus:outline-none"
+            className="flex items-center gap-2 p-1 pl-2 md:pl-3 border border-gray-200 rounded-full hover:shadow-md transition-all bg-white focus:outline-none"
           >
-            <span className="text-sm font-medium text-black hidden sm:inline">
+            <span className="text-sm font-medium text-black hidden sm:inline truncate max-w-[80px] md:max-w-none">
               {auth?.user?.name || "User"}
             </span>
-            <div className="h-8 w-8 rounded-full bg-[var(--brand)] flex items-center justify-center text-white font-semibold text-xs border border-white">
+            <div className="h-8 w-8 rounded-full bg-[var(--brand)] flex items-center justify-center text-white font-semibold text-xs border border-white flex-shrink-0">
               {auth?.user?.name?.charAt(0).toUpperCase() || "U"}
             </div>
           </button>
