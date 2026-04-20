@@ -9,16 +9,12 @@ type RadioGroupProps = {
 
 export function RadioGroup({
   children,
-  value,
-  onChange,
   className,
   ...props
 }: RadioGroupProps) {
   return (
     <fieldset
       className={cn("space-y-2", className)}
-      value={value}
-      onChange={(e) => onChange?.(e.target as unknown as string)}
       {...props}
     >
       {children}

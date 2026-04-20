@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -39,6 +39,7 @@ export function Sidebar({ isMobileOpen = false, onCloseMobile }: {
 }) {
   const { userRole } = usePermissions();
   const pathname = usePathname();
+  const prevPathnameRef = useRef(pathname);
 
   const visibleItems = NAV_ITEMS.filter(
     (item) => !item.roles || (userRole && item.roles.includes(userRole))
@@ -53,9 +54,10 @@ export function Sidebar({ isMobileOpen = false, onCloseMobile }: {
 
   // Close mobile menu on route change
   useEffect(() => {
-    if (isMobileOpen && onCloseMobile) {
+    if (isMobileOpen && onCloseMobile && prevPathnameRef.current !== pathname) {
       onCloseMobile();
     }
+    prevPathnameRef.current = pathname;
   }, [pathname, isMobileOpen, onCloseMobile]);
 
   return (
@@ -71,7 +73,7 @@ export function Sidebar({ isMobileOpen = false, onCloseMobile }: {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 w-64 border-r bg-white flex flex-col",
+          "fixed inset-y-0 left-0 w-64 border-r bg-white flex flex-col z-50",
           "transform transition-transform duration-300 ease-in-out",
           isMobileOpen ? "translate-x-0" : "-translate-x-full",
           "md:translate-x-0 md:z-10"
